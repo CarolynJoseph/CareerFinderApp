@@ -8,6 +8,7 @@ from kivy.metrics import dp
 from threading import Thread
 from kivy.clock import Clock
 from kivy.core.clipboard import Clipboard
+from career_finder_app.aiintegration.huggingfaceinference import get_modified_coverletter
 
 
 
@@ -66,7 +67,7 @@ class CoverLetterScreen(MDScreen):
 
         self.input_field = MDTextField(
             multiline=True,
-            hint_text="Start typing your background, skills, and experience...",
+            hint_text="Write a sample cover letter to modify...",
             size_hint_y=None,
             font_size="14sp",
             mode="rectangle",  # Rectangle mode looks cleaner
@@ -184,7 +185,7 @@ class CoverLetterScreen(MDScreen):
 
         # Disable button during generation
         self.generate_btn.disabled = True
-        self.generate_btn.text = "Generating..."
+        self.generate_btn.text = "Generating"
         self.output_field.text = "Generating your cover letter..."
 
         # Run in thread to avoid blocking UI
@@ -242,19 +243,12 @@ class CoverLetterScreen(MDScreen):
         :param user_info: user input string
         :return: generated cover letter string
         """
-        # todo: implement actual AI calls
-        # Placeholder implementation
-        return f"""Dear Hiring Manager at {company},
-
-        I am writing to express my strong interest in the {job_title} position.
-
-        {user_info}
-
-        I  and look forward to discussing how my skills align with your needs.
-
-        Sincerely,
-        [Your Name]"""
-
+        generated_coverletter = get_modified_coverletter(job_description, user_info)
+        
+        if not generated_coverletter:
+            raise ValueError("AI service returned no content.")
+        return generated_coverletter
+       
     def _update_output(self, text):
         """
         update output field with generated text
