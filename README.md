@@ -46,7 +46,9 @@ python src/career_finder_app/mainapp.py
 
 ## Configuration
 - Create a .env file and add your huggingface token as follows
+```
 export HF_TOKEN="your_token_here"
+```
 
 ## License
 This project is licensed under the terms of the LICENSE file in this repository.
